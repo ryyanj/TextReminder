@@ -14,8 +14,8 @@ from apscheduler.triggers.cron import CronTrigger
 logging.basicConfig()
 utc = pytz.utc
 # Find these values at https://twilio.com/user/account
-account_sid = 'ACdc0bae8c0927f2fc28fb18d90d742832'
-auth_token = 'bd0968ff79b1c26e84f5eae794757416'
+account_sid = os.environ.get('ACCOUNT_SID', None)
+auth_token = os.environ.get('AUTH_TOKEN', None)
 client = Client(account_sid, auth_token)
 scheduler = BackgroundScheduler()
 class AveryPillScheduler():
@@ -25,7 +25,7 @@ class AveryPillScheduler():
         scheduler.add_job(
             func=self.print_pill_message,
             #use this timer after daylight savings time ends on November 17
-            #trigger=CronTrigger(year='*', month='*', day='*', week='*', day_of_week='*', hour='16', minute='30', second='00',timezone=utc),
+            trigger=CronTrigger(year='*', month='*', day='*', week='*', day_of_week='*', hour='16', minute='30', second='00',timezone=utc),
             #trigger=CronTrigger(year='*', month='*', day='*', week='*', day_of_week='*', hour='*', minute='*', second='30',timezone=utc),
             #use this timer after daylight savings time begin on March 10
             #trigger=CronTrigger(year='*', month='*', day='*', week='*', day_of_week='*', hour='15', minute='30', second='00',timezone=utc),
@@ -42,9 +42,9 @@ class AveryPillScheduler():
         #+14782922142 - twilio number
         #+12514228131 - avery's phone number
         try:
+            client.api.account.messages.create(to="+12514228131",
+                                               from_="+14782922142",
+                                               body="Don't forget to take your pill babe! I love you! ")
             print('sent successfully')
-            message = client.api.account.messages.create(to="+12514228131",
-                                                         from_="+14782922142",
-                                                         body="Don't forget to take your pill babe! I love you! ")
-        except error:
+        except Exception as error:
             print(error)
