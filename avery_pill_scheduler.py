@@ -25,10 +25,9 @@ class AveryPillScheduler():
         scheduler.add_job(
             func=self.print_pill_message,
             #use this timer after daylight savings time ends on November 17
-            trigger=CronTrigger(year='*', month='*', day='*', week='*', day_of_week='*', hour='16', minute='30', second='00',timezone=utc),
-            #trigger=CronTrigger(year='*', month='*', day='*', week='*', day_of_week='*', hour='*', minute='*', second='30',timezone=utc),
+            #trigger=CronTrigger(year='*', month='*', day='*', week='*', day_of_week='*', hour='16', minute='30', second='00',timezone=utc),
             #use this timer after daylight savings time begin on March 10
-            #trigger=CronTrigger(year='*', month='*', day='*', week='*', day_of_week='*', hour='15', minute='30', second='00',timezone=utc),
+            trigger=CronTrigger(year='*', month='*', day='*', week='*', day_of_week='*', hour='15', minute='30', second='00',timezone=utc),
             id='printing_job',
             name='Print pill message every day at 11:30 AM Eastern Time',
             replace_existing=True)
